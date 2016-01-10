@@ -46,11 +46,11 @@ That will output:
 You can customize the size of the resulting avatar by passing the size arugment:
 
 ```
-{% avatar hubot size=25 %}
+{% avatar hubot size=50 %}
 ```
 
 That will output:
 
 ```html
-<img class="avatar avatar-small" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=25" alt="hubot" width="25" height="25" />
+<img class="avatar" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=50" alt="hubot" width="50" height="50" />
 ```

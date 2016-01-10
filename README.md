@@ -1,0 +1,54 @@
+# Jekyll Avatar
+
+*A Jekyll plugin for rendering GitHub avatars*
+
+Jekyll Avatar makes it easy to add GitHub avatars to your Jekyll site by specifying a username. If performance is a concern, Jekyll Avatar is deeply integrated with the GitHub avatar API, ensuring avatars are cached and load in parallel.
+
+## Installation
+
+Add the following to your site's `Gemfile`:
+
+```ruby
+gem 'jekyll-avatar'
+```
+
+And add the following to your site's `_config.yml` file:
+
+```yaml
+gems:
+  - jekyll-avatar
+```
+
+## Usage
+
+Simply add the following, anywhere you'd like a user's avatar to appear:
+
+```
+{% avatar [USERNAME] %}
+```
+
+With `[USERNAME]` being the user's GitHub username:
+
+```
+{% avatar hubot %}
+```
+
+That will output:
+
+```html
+<img class="avatar avatar-small" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40" alt="hubot" width="40" height="40" />
+```
+
+### Customizing
+
+You can customize the size of the resulting avatar by passing the size arugment:
+
+```
+{% avatar hubot size=25 %}
+```
+
+That will output:
+
+```html
+<img class="avatar avatar-small" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=25" alt="hubot" width="25" height="25" />
+```

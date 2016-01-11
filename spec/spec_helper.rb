@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'jekyll'
-require 'jekyll/avatar'
+require 'jekyll-avatar'
 
 TEST_DIR = File.dirname(__FILE__)
 TMP_DIR  = File.expand_path('../tmp', TEST_DIR)

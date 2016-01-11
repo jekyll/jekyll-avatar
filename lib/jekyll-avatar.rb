@@ -1,4 +1,4 @@
-require 'jekyll/avatar/version'
+require 'jekyll-avatar/version'
 
 module Jekyll
   class Avatar < Liquid::Tag

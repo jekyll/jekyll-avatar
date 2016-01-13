@@ -43,7 +43,7 @@ That will output:
 
 ### Customizing
 
-You can customize the size of the resulting avatar by passing the size arugment:
+You can customize the size of the resulting avatar by passing the size argument:
 
 ```
 {% avatar hubot size=50 %}
@@ -53,4 +53,19 @@ That will output:
 
 ```html
 <img class="avatar" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=50" alt="hubot" width="50" height="50" />
+```
+
+### Passing the username as variable
+
+You can also pass the username as a variable, like this:
+
+```
+{% assign username="hubot" %}
+{% avatar {{ username }} %}
+```
+
+Or, if the variables is in the page's front matter:
+
+```
+{% avatar {{ page.username }} %}
 ```

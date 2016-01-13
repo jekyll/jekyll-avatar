@@ -79,4 +79,15 @@ describe Jekyll::Avatar do
       expect(rendered).to_not match(/avatar-small/)
     end
   end
+
+  context 'when passed the username as a variable' do
+    let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
+
+    it 'parses the variable' do
+      expected =  '<img class="avatar avatar-small" '
+      expected << 'src="https://avatars0.githubusercontent.com/'
+      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" width="40" height="40" />'
+      expect(output).to eql("<p>#{expected}</p>\n")
+    end
+  end
 end

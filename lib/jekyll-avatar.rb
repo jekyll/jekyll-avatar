@@ -6,12 +6,14 @@ module Jekyll
     DEFAULT_SIZE = 40
     VERSION = 3
 
-    def initialize(tag_name, text, tokens)
+    def initialize(_tag_name, text, _tokens)
       super
       @text = text
     end
 
-    def render(_context)
+    def render(context)
+      @text = Liquid::Template.parse(@text).render(context)
+
       tag = '<img '
 
       # See http://primercss.io/avatars/#small-avatars
@@ -22,8 +24,7 @@ module Jekyll
       end
 
       tag << "src=\"#{url}\" alt=\"#{username}\" "
-      tag << "width=\"#{size}\" height=\"#{size}\" "
-      tag << '/>'
+      tag << "width=\"#{size}\" height=\"#{size}\" />"
       tag
     end
 

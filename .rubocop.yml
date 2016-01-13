@@ -8,3 +8,6 @@ Style/Documentation:
 Lint/EndAlignment:
   AlignWith: variable
   AutoCorrect: true
+
+Style/FileName:
+  Enabled: false

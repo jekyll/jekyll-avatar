@@ -1,5 +1,3 @@
-require 'jekyll-avatar/version'
-
 module Jekyll
   class Avatar < Liquid::Tag
     SERVERS = 4

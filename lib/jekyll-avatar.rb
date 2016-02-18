@@ -28,8 +28,8 @@ module Jekyll
     private
 
     def username
-      matches = @text.match(/\s+user=(\w+)\s+/)
-      if matches
+      matches = @text.match(/\buser=(\w+)\b/)
+      if matches && @context.has_key?(matches[1])
         @context[matches[1]]
       else
         @text.split(' ').first.sub('@', '')

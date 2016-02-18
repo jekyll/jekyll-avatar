@@ -20,7 +20,12 @@ describe Jekyll::Avatar do
   it 'outputs the HTML' do
     expected =  '<img class="avatar avatar-small" '
     expected << 'src="https://avatars3.githubusercontent.com/'
-    expected << 'hubot?v=3&amp;s=40" alt="hubot" width="40" height="40" />'
+    expected << 'hubot?v=3&amp;s=40" alt="hubot" srcset="'
+    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40 1x, '
+    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=80 2x, '
+    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=120 3x, '
+    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=160 4x" '
+    expected << 'width="40" height="40" />'
     expect(rendered)
     expect(output).to eql("<p>#{expected}</p>\n")
   end
@@ -50,6 +55,26 @@ describe Jekyll::Avatar do
     expect(subject.send(:url)).to eql(expected)
   end
 
+  context 'retina' do
+    it 'builds the path with a scale' do
+      expect(subject.send(:path, 2)).to eql('hubot?v=3&s=80')
+    end
+
+    it 'builds the URL with a scale' do
+      expected = 'https://avatars3.githubusercontent.com/hubot?v=3&s=80'
+      expect(subject.send(:url, 2)).to eql(expected)
+    end
+
+    it 'builds the srcset' do
+      expected = { 1 => 40, 2 => 80, 3 => 120, 4 => 160 }
+      base = Regexp.escape 'https://avatars3.githubusercontent.com/hubot?v=3&'
+      srcset = subject.send(:srcset)
+      expected.each do |scale, width|
+        expect(srcset).to match(/#{base}s=#{width} #{scale}x/)
+      end
+    end
+  end
+
   context 'when passed @hubot as a username' do
     let(:username) { '@hubot' }
 
@@ -70,6 +95,10 @@ describe Jekyll::Avatar do
     it 'includes the avatar-small class' do
       expect(rendered).to match(/avatar-small/)
     end
+
+    it 'calculates the classes' do
+      expect(subject.send(:classes)).to eql('avatar avatar-small')
+    end
   end
 
   context 'with a size > 48' do
@@ -77,6 +106,10 @@ describe Jekyll::Avatar do
 
     it "doesn't include the avatar-small class" do
       expect(rendered).to_not match(/avatar-small/)
+    end
+
+    it 'calculates the classes' do
+      expect(subject.send(:classes)).to eql('avatar')
     end
   end
 
@@ -86,7 +119,12 @@ describe Jekyll::Avatar do
     it 'parses the variable' do
       expected =  '<img class="avatar avatar-small" '
       expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" width="40" height="40" />'
+      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
+      expected << 'width="40" height="40" />'
       expect(output).to eql("<p>#{expected}</p>\n")
     end
   end
@@ -97,7 +135,12 @@ describe Jekyll::Avatar do
     it 'parses the variable' do
       expected =  '<img class="avatar avatar-small" '
       expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" width="40" height="40" />'
+      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, '
+      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
+      expected << 'width="40" height="40" />'
       expect(output).to eql("<p>#{expected}</p>\n")
     end
   end

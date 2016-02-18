@@ -55,6 +55,15 @@ describe Jekyll::Avatar do
     expect(subject.send(:url)).to eql(expected)
   end
 
+  it 'builds the params' do
+    attrs = subject.send(:attributes)
+    expect(attrs[:class]).to eql('avatar avatar-small')
+    expect(attrs[:alt]).to eql('hubot')
+    expect(attrs[:src]).to eql('https://avatars3.githubusercontent.com/hubot?v=3&s=40')
+    expect(attrs[:width]).to eql(40)
+    expect(attrs[:height]).to eql(40)
+  end
+
   context 'retina' do
     it 'builds the path with a scale' do
       expect(subject.send(:path, 2)).to eql('hubot?v=3&s=80')

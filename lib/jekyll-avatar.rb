@@ -12,13 +12,22 @@ module Jekyll
     def render(context)
       @context = context
       @text    = Liquid::Template.parse(@text).render(@context)
-      tag =  "<img class=\"#{classes}\" "
-      tag << "src=\"#{url}\" alt=\"#{username}\" "
-      tag << "srcset=\"#{srcset}\" "
-      tag << "width=\"#{size}\" height=\"#{size}\" />"
+      attrs    = attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(' ')
+      "<img #{attrs} />"
     end
 
     private
+
+    def attributes
+      {
+        class:  classes,
+        src:    url,
+        alt:    username,
+        srcset: srcset,
+        width:  size,
+        height: size
+      }
+    end
 
     def username
       matches = @text.match(/\buser=(\w+)\b/)

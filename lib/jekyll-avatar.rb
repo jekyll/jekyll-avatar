@@ -15,11 +15,11 @@ module Jekyll
       tag = '<img '
 
       # See http://primercss.io/avatars/#small-avatars
-      if size < 48
-        tag << 'class="avatar avatar-small" '
-      else
-        tag << 'class="avatar" '
-      end
+      tag << if size < 48
+               'class="avatar avatar-small" '
+             else
+               'class="avatar" '
+             end
 
       tag << "src=\"#{url}\" alt=\"#{username}\" "
       tag << "width=\"#{size}\" height=\"#{size}\" />"

@@ -90,4 +90,18 @@ describe Jekyll::Avatar do
       expect(output).to eql("<p>#{expected}</p>\n")
     end
   end
+
+  context 'loops' do
+    let(:content) do
+      content =  '{% assign users = "a|b" | split:"|" %}'
+      content << '{% for user in users %}'
+      content << '  {% avatar {{ user }} %}'
+      content << '{% endfor %}'
+      content
+    end
+
+    it 'renders each avatar' do
+      expect(output).to match('alt="b"')
+    end
+  end
 end

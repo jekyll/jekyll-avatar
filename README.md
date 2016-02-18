@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/benbalter/jekyll-avatar.svg)](https://travis-ci.org/benbalter/jekyll-avatar)
 
-Jekyll Avatar makes it easy to add GitHub avatars to your Jekyll site by specifying a username. If performance is a concern, Jekyll Avatar is deeply integrated with the GitHub avatar API, ensuring avatars are cached and load in parallel.
+Jekyll Avatar makes it easy to add GitHub avatars to your Jekyll site by specifying a username. If performance is a concern, Jekyll Avatar is deeply integrated with the GitHub avatar API, ensuring avatars are cached and load in parallel. It even automatically upgrades users to Retina images, when supported.
 
 ## Installation
 
@@ -38,7 +38,7 @@ With `[USERNAME]` being the user's GitHub username:
 That will output:
 
 ```html
-<img class="avatar avatar-small" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40" alt="hubot" width="40" height="40" />
+<img class="avatar avatar-small" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40" alt="hubot" srcset="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=160 4x" width="40" height="40" />
 ```
 
 ### Customizing
@@ -52,7 +52,7 @@ You can customize the size of the resulting avatar by passing the size argument:
 That will output:
 
 ```html
-<img class="avatar" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=50" alt="hubot" width="50" height="50" />
+<img class="avatar" src="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=50" alt="hubot" srcset="https://avatars3.githubusercontent.com/hubot?v=3&amp;s=50 1x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=100 2x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=150 3x, https://avatars3.githubusercontent.com/hubot?v=3&amp;s=200 4x" width="50" height="50" />
 ```
 
 ### Passing the username as variable

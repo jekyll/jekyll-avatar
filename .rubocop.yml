@@ -11,3 +11,10 @@ Lint/EndAlignment:
 
 Style/FileName:
   Enabled: false
+
+Metrics/LineLength:
+  Exclude:
+    - spec/*/**
+
+Style/DeprecatedHashMethods:
+  Enabled: false

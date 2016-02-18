@@ -12,16 +12,9 @@ module Jekyll
     def render(context)
       @context = context
       @text    = Liquid::Template.parse(@text).render(@context)
-      tag = '<img '
-
-      # See http://primercss.io/avatars/#small-avatars
-      tag << if size < 48
-               'class="avatar avatar-small" '
-             else
-               'class="avatar" '
-             end
-
+      tag =  "<img class=\"#{classes}\" "
       tag << "src=\"#{url}\" alt=\"#{username}\" "
+      tag << "srcset=\"#{srcset}\" "
       tag << "width=\"#{size}\" height=\"#{size}\" />"
     end
 
@@ -41,8 +34,8 @@ module Jekyll
       matches ? matches[1].to_i : DEFAULT_SIZE
     end
 
-    def path
-      "#{username}?v=#{VERSION}&s=#{size}"
+    def path(scale = 1)
+      "#{username}?v=#{VERSION}&s=#{size * scale}"
     end
 
     def server_number
@@ -53,8 +46,17 @@ module Jekyll
       "avatars#{server_number}.githubusercontent.com"
     end
 
-    def url
-      "https://#{host}/#{path}"
+    def url(scale = 1)
+      "https://#{host}/#{path(scale)}"
+    end
+
+    def srcset
+      (1..4).map { |scale| "#{url(scale)} #{scale}x" }.join(', ')
+    end
+
+    # See http://primercss.io/avatars/#small-avatars
+    def classes
+      size < 48 ? 'avatar avatar-small' : 'avatar'
     end
   end
 end

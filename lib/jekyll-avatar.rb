@@ -1,8 +1,8 @@
 module Jekyll
   class Avatar < Liquid::Tag
-    SERVERS = 4
+    SERVERS      = 4
     DEFAULT_SIZE = 40
-    VERSION = 3
+    API_VERSION  = 3
 
     def initialize(_tag_name, text, _tokens)
       super
@@ -44,7 +44,7 @@ module Jekyll
     end
 
     def path(scale = 1)
-      "#{username}?v=#{VERSION}&s=#{size * scale}"
+      "#{username}?v=#{API_VERSION}&s=#{size * scale}"
     end
 
     def server_number

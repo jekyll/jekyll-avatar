@@ -28,7 +28,7 @@ module Jekyll
     private
 
     def username
-      matches = @text.match(/\buser=(\w+)\b/)
+      matches = @text.match(/\s+user=(\w+)\s+/)
       if matches
         @context[matches[1]]
       else

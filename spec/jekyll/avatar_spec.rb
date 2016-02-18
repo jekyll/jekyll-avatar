@@ -80,8 +80,19 @@ describe Jekyll::Avatar do
     end
   end
 
-  context 'when passed the username as a variable' do
+  context 'when passed the username as a rendered variable' do
     let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
+
+    it 'parses the variable' do
+      expected =  '<img class="avatar avatar-small" '
+      expected << 'src="https://avatars0.githubusercontent.com/'
+      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" width="40" height="40" />'
+      expect(output).to eql("<p>#{expected}</p>\n")
+    end
+  end
+
+  context 'when passed the username as a variable-argument' do
+    let(:content) { "{% assign user='hubot2' %}{% avatar user=user %}" }
 
     it 'parses the variable' do
       expected =  '<img class="avatar avatar-small" '
@@ -95,7 +106,7 @@ describe Jekyll::Avatar do
     let(:content) do
       content =  '{% assign users = "a|b" | split:"|" %}'
       content << '{% for user in users %}'
-      content << '  {% avatar {{ user }} %}'
+      content << '  {% avatar user=user %}'
       content << '{% endfor %}'
       content
     end

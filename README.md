@@ -64,8 +64,11 @@ You can also pass the username as a variable, like this:
 {% avatar {{ username }} %}
 ```
 
-Or, if the variables is in the page's front matter:
+Or, if the variable is someplace a bit more complex, like a loop:
 
 ```
-{% avatar {{ page.username }} %}
+{% assign employees = "alice|bob" | split:"|" %}
+{% for employee in employees %}
+  {% avatar user=employee %}
+{% endfor %}
 ```

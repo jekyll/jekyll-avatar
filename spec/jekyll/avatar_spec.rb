@@ -25,7 +25,7 @@ describe Jekyll::Avatar do
     expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=80 2x, '
     expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=120 3x, '
     expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=160 4x" '
-    expected << 'width="40" height="40" />'
+    expected << 'width="40" height="40" data-proofer-ignore="true" />'
     expect(rendered)
     expect(output).to eql("<p>#{expected}</p>\n")
   end
@@ -62,6 +62,10 @@ describe Jekyll::Avatar do
     expect(attrs[:src]).to eql('https://avatars3.githubusercontent.com/hubot?v=3&s=40')
     expect(attrs[:width]).to eql(40)
     expect(attrs[:height]).to eql(40)
+  end
+
+  it 'includes data-proofer-ignore' do
+    expect(output).to match(/data-proofer-ignore=\"true\"/)
   end
 
   context 'retina' do
@@ -133,7 +137,7 @@ describe Jekyll::Avatar do
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, '
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, '
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" />'
+      expected << 'width="40" height="40" data-proofer-ignore="true" />'
       expect(output).to eql("<p>#{expected}</p>\n")
     end
   end
@@ -149,7 +153,7 @@ describe Jekyll::Avatar do
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, '
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, '
       expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" />'
+      expected << 'width="40" height="40" data-proofer-ignore="true" />'
       expect(output).to eql("<p>#{expected}</p>\n")
     end
   end

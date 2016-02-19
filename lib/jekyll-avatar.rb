@@ -20,12 +20,13 @@ module Jekyll
 
     def attributes
       {
-        class:  classes,
-        src:    url,
-        alt:    username,
-        srcset: srcset,
-        width:  size,
-        height: size
+        :class                 => classes,
+        :src                   => url,
+        :alt                   => username,
+        :srcset                => srcset,
+        :width                 => size,
+        :height                => size,
+        :'data-proofer-ignore' => true
       }
     end
 

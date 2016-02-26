@@ -1,3 +1,5 @@
+require "zlib"
+
 module Jekyll
   class Avatar < Liquid::Tag
     SERVERS      = 4

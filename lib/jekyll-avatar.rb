@@ -1,4 +1,4 @@
-require "zlib"
+require 'zlib'
 
 module Jekyll
   class Avatar < Liquid::Tag

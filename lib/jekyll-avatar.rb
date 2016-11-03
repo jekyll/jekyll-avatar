@@ -1,7 +1,10 @@
-require 'zlib'
+# frozen_string_literal: true
+require "zlib"
 
 module Jekyll
   class Avatar < Liquid::Tag
+    include Jekyll::LiquidExtensions
+
     SERVERS      = 4
     DEFAULT_SIZE = 40
     API_VERSION  = 3
@@ -14,7 +17,7 @@ module Jekyll
     def render(context)
       @context = context
       @text    = Liquid::Template.parse(@text).render(@context)
-      attrs    = attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(' ')
+      attrs    = attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")
       "<img #{attrs} />"
     end
 
@@ -22,27 +25,27 @@ module Jekyll
 
     def attributes
       {
-        :class                 => classes,
-        :src                   => url,
-        :alt                   => username,
-        :srcset                => srcset,
-        :width                 => size,
-        :height                => size,
-        :'data-proofer-ignore' => true
+        :class                => classes,
+        :src                  => url,
+        :alt                  => username,
+        :srcset               => srcset,
+        :width                => size,
+        :height               => size,
+        "data-proofer-ignore" => true
       }
     end
 
     def username
-      matches = @text.match(/\buser=(\w+)\b/)
-      if matches && @context.has_key?(matches[1])
-        @context[matches[1]]
+      matches = @text.match(%r!\buser=([\w\.]+)\b!)
+      if matches
+        lookup_variable(@context, matches[1])
       else
-        @text.split(' ').first.sub('@', '')
+        @text.split(" ").first.sub("@", "")
       end
     end
 
     def size
-      matches = @text.match(/\bsize=(\d+)\b/i)
+      matches = @text.match(%r!\bsize=(\d+)\b!i)
       matches ? matches[1].to_i : DEFAULT_SIZE
     end
 
@@ -63,14 +66,14 @@ module Jekyll
     end
 
     def srcset
-      (1..4).map { |scale| "#{url(scale)} #{scale}x" }.join(', ')
+      (1..4).map { |scale| "#{url(scale)} #{scale}x" }.join(", ")
     end
 
     # See http://primercss.io/avatars/#small-avatars
     def classes
-      size < 48 ? 'avatar avatar-small' : 'avatar'
+      size < 48 ? "avatar avatar-small" : "avatar"
     end
   end
 end
 
-Liquid::Template.register_tag('avatar', Jekyll::Avatar)
+Liquid::Template.register_tag("avatar", Jekyll::Avatar)

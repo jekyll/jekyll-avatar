@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "jekyll"
@@ -44,4 +45,12 @@ end
 def fixture(name)
   path = File.expand_path "./fixtures/#{name}.json", File.dirname(__FILE__)
   File.open(path).read
+end
+
+def with_env(key, value)
+  old_value = ENV[key]
+  ENV[key] = value
+  yield
+ensure
+  ENV[key] = old_value
 end

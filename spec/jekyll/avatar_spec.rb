@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 describe Jekyll::Avatar do
@@ -8,11 +9,13 @@ describe Jekyll::Avatar do
   let(:text) { "#{username} #{args}".squeeze(" ") }
   let(:content) { "{% avatar #{text} %}" }
   let(:rendered) { subject.render(nil) }
+  let(:tokenizer) { Liquid::Tokenizer.new("") }
+  let(:parse_context) { Liquid::ParseContext.new }
   let(:output) do
     doc.content = content
     doc.output  = Jekyll::Renderer.new(doc.site, doc).run
   end
-  subject { Jekyll::Avatar.send(:new, "avatar", text, nil) }
+  subject { described_class.parse "avatar", text, tokenizer, parse_context }
 
   it "has a version number" do
     expect(Jekyll::Avatar::VERSION).not_to be nil
@@ -40,7 +43,32 @@ describe Jekyll::Avatar do
   end
 
   it "builds the host" do
-    expect(subject.send(:host)).to eql("avatars3.githubusercontent.com")
+    expect(subject.send(:host)).to eql("https://avatars3.githubusercontent.com")
+  end
+
+  context "with a custom host" do
+    context "with subdomain isolation" do
+      it "builds the host" do
+        with_env("PAGES_AVATARS_URL", "http://avatars.example.com") do
+          expect(subject.send(:host)).to eql("http://avatars.example.com")
+        end
+      end
+
+      it "builds the URL" do
+        with_env("PAGES_AVATARS_URL", "http://avatars.example.com") do
+          expect(subject.send(:url).to_s).to eql("http://avatars.example.com/hubot?v=3&s=40")
+        end
+      end
+    end
+
+    context "without subdomain isolation" do
+      it "builds the URL" do
+        with_env("PAGES_AVATARS_URL", "http://github.example.com/avatars/") do
+          expected = "http://github.example.com/avatars/hubot?v=3&s=40"
+          expect(subject.send(:url).to_s).to eql(expected)
+        end
+      end
+    end
   end
 
   it "builds the path" do
@@ -53,14 +81,14 @@ describe Jekyll::Avatar do
 
   it "builds the URL" do
     expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=40"
-    expect(subject.send(:url)).to eql(expected)
+    expect(subject.send(:url).to_s).to eql(expected)
   end
 
   it "builds the params" do
     attrs = subject.send(:attributes)
     expect(attrs[:class]).to eql("avatar avatar-small")
     expect(attrs[:alt]).to eql("hubot")
-    expect(attrs[:src]).to eql("https://avatars3.githubusercontent.com/hubot?v=3&s=40")
+    expect(attrs[:src].to_s).to eql("https://avatars3.githubusercontent.com/hubot?v=3&s=40")
     expect(attrs[:width]).to eql(40)
     expect(attrs[:height]).to eql(40)
   end
@@ -76,7 +104,7 @@ describe Jekyll::Avatar do
 
     it "builds the URL with a scale" do
       expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=80"
-      expect(subject.send(:url, 2)).to eql(expected)
+      expect(subject.send(:url, 2).to_s).to eql(expected)
     end
 
     it "builds the srcset" do

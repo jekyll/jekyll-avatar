@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "zlib"
 
 module Jekyll
@@ -31,7 +32,7 @@ module Jekyll
         :srcset               => srcset,
         :width                => size,
         :height               => size,
-        "data-proofer-ignore" => true
+        "data-proofer-ignore" => true,
       }
     end
 
@@ -58,11 +59,17 @@ module Jekyll
     end
 
     def host
-      "avatars#{server_number}.githubusercontent.com"
+      if ENV["PAGES_AVATARS_URL"].to_s.empty?
+        "https://avatars#{server_number}.githubusercontent.com"
+      else
+        ENV["PAGES_AVATARS_URL"]
+      end
     end
 
     def url(scale = 1)
-      "https://#{host}/#{path(scale)}"
+      uri = Addressable::URI.parse host
+      uri.path << "/" unless uri.path.end_with?("/")
+      uri.join path(scale)
     end
 
     def srcset

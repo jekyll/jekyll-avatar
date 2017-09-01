@@ -13,4 +13,4 @@ Metrics/BlockLength:
 
 AllCops:
   Exclude:
-    - vendor/*/**
+    - vendor/**/*

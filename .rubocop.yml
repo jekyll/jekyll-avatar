@@ -10,3 +10,7 @@ Metrics/LineLength:
 
 Metrics/BlockLength:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - vendor/*/**

@@ -72,3 +72,12 @@ Or, if the variable is someplace a bit more complex, like a loop:
   {% avatar user=employee %}
 {% endfor %}
 ```
+
+### Using with GitHub Enterprise
+
+To use Jekyll Avatars with GitHub Enterprise, you must set the `PAGES_AVATARS_URL` environmental variable.
+
+This should be the full URL to the avatars subdomain or subpath. For example:
+
+* With subdomain isolation: `PAGES_AVATARS_URL="https://avatars.github.example.com"`
+* Without subdomain isolation: `PAGES_AVATARS_URL="https://github.example.com/avatars"` 

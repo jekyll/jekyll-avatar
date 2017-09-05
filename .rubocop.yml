@@ -7,3 +7,10 @@ Style/FileName:
 Metrics/LineLength:
   Exclude:
     - spec/*/**
+
+Metrics/BlockLength:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - vendor/**/*

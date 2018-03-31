@@ -22,16 +22,17 @@ describe Jekyll::Avatar do
   end
 
   it "outputs the HTML" do
-    expected =  '<img class="avatar avatar-small" '.dup
-    expected << 'src="https://avatars3.githubusercontent.com/'
-    expected << 'hubot?v=3&amp;s=40" alt="hubot" srcset="'
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40 1x, "
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=80 2x, "
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=120 3x, "
-    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=160 4x" '
-    expected << 'width="40" height="40" data-proofer-ignore="true" />'
-    expect(rendered)
-    expect(output).to eql("<p>#{expected}</p>\n")
+    expect(output).to have_tag('p') do
+      with_tag 'img', :with => {
+        :alt => "hubot",
+        :class => 'avatar avatar-small',
+        'data-proofer-ignore' => 'true',
+        :height => '40',
+        :src => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40',
+        :srcset => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x',
+        :width => '40'
+      }
+    end
   end
 
   it "parses the username" do
@@ -159,15 +160,9 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 
@@ -175,15 +170,9 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar user=user %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 
@@ -191,15 +180,9 @@ describe Jekyll::Avatar do
     let(:content) { "{% avatar user=page.author %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 

@@ -209,4 +209,18 @@ describe Jekyll::Avatar do
       end
     end
   end
+
+  context "lazy loading" do
+    let(:args) { "lazy=true" }
+
+    it "sets the image URL as the data-src" do
+      expect(output).to have_tag 'img', :with => {
+        :src => '',
+        'data-src' => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40',
+        'data-srcset' => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x'
+      }, :without => {
+        :srcset => /.*/
+      }
+    end
+  end
 end

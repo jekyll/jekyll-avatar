@@ -25,15 +25,28 @@ module Jekyll
     private
 
     def attributes
-      {
+      result = {
         :class                => classes,
-        :src                  => url,
         :alt                  => username,
-        :srcset               => srcset,
         :width                => size,
         :height               => size,
         "data-proofer-ignore" => true,
       }
+
+      if lazy_load?
+        result[:src] = ''
+        result['data-src'] = url
+        result['data-srcset'] = srcset
+      else
+        result[:src] = url
+        result[:srcset] = srcset
+      end
+
+      result
+    end
+
+    def lazy_load?
+      @text.include?('lazy=true')
     end
 
     def username

@@ -73,6 +73,19 @@ Or, if the variable is someplace a bit more complex, like a loop:
 {% endfor %}
 ```
 
+### Lazy loading images
+
+For pages showing a large number of avatars, you may want to load the images lazily.
+
+```liquid
+{% avatar hubot lazy=true %}
+```
+
+This will set the `data-src` and `data-srcset` attributes on the `<img>` tag, which is compatible with many lazy load JavaScript plugins, such as:
+
+* https://www.andreaverlicchi.eu/lazyload/
+* https://appelsiini.net/projects/lazyload/
+
 ### Using with GitHub Enterprise
 
 To use Jekyll Avatars with GitHub Enterprise, you must set the `PAGES_AVATARS_URL` environmental variable.
@@ -80,4 +93,4 @@ To use Jekyll Avatars with GitHub Enterprise, you must set the `PAGES_AVATARS_UR
 This should be the full URL to the avatars subdomain or subpath. For example:
 
 * With subdomain isolation: `PAGES_AVATARS_URL="https://avatars.github.example.com"`
-* Without subdomain isolation: `PAGES_AVATARS_URL="https://github.example.com/avatars"` 
+* Without subdomain isolation: `PAGES_AVATARS_URL="https://github.example.com/avatars"`

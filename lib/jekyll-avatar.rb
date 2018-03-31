@@ -69,7 +69,8 @@ module Jekyll
     def url(scale = 1)
       uri = Addressable::URI.parse host
       uri.path << "/" unless uri.path.end_with?("/")
-      uri.join path(scale)
+      uri = uri.join path(scale)
+      uri.to_s
     end
 
     def srcset

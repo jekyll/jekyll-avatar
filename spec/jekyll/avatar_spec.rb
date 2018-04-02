@@ -15,6 +15,27 @@ describe Jekyll::Avatar do
     doc.content = content
     doc.output  = Jekyll::Renderer.new(doc.site, doc).run
   end
+
+  let(:server_number) { 3 }
+  let(:host) { "https://avatars#{server_number}.githubusercontent.com" }
+  let(:uri) do
+    uri = Addressable::URI.parse(host)
+    uri.path = "#{uri.path}/#{username}"
+    uri.query_values = { :v => 3, :s => width }.to_a
+    uri
+  end
+  let(:height) { 40 }
+  let(:width) { 40 }
+  let(:scales) { (1..4) }
+  let(:src) { src_hash["1x"] }
+  let(:src_hash) do
+    scales.map do |scale|
+      uri.query_values = { "v" => 3, "s" => width * scale }.to_a
+      ["#{scale}x", uri.to_s]
+    end.to_h
+  end
+  let(:srcset) { src_hash.map { |scale, src| "#{src} #{scale}" }.join(", ") }
+
   subject { described_class.parse "avatar", text, tokenizer, parse_context }
 
   it "has a version number" do
@@ -24,49 +45,50 @@ describe Jekyll::Avatar do
   it "outputs the HTML" do
     expect(output).to have_tag("p") do
       with_tag "img", :with => {
-        :alt                  => "hubot",
+        :alt                  => username,
         :class                => "avatar avatar-small",
         "data-proofer-ignore" => "true",
-        :height               => "40",
-        :src                  => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
-        :srcset               => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
-        :width                => "40",
+        :height               => height,
+        :src                  => src,
+        :srcset               => srcset,
+        :width                => width,
       }
     end
   end
 
   it "parses the username" do
-    expect(subject.send(:username)).to eql("hubot")
+    expect(subject.send(:username)).to eql(username)
   end
 
   it "determines the server number" do
-    expect(subject.send(:server_number)).to eql(3)
+    expect(subject.send(:server_number)).to eql(server_number)
   end
 
   it "builds the host" do
-    expect(subject.send(:host)).to eql("https://avatars3.githubusercontent.com")
+    expect(subject.send(:host)).to eql(host)
   end
 
   context "with a custom host" do
+    let(:host) { "http://avatars.example.com" }
     context "with subdomain isolation" do
       it "builds the host" do
-        with_env("PAGES_AVATARS_URL", "http://avatars.example.com") do
-          expect(subject.send(:host)).to eql("http://avatars.example.com")
+        with_env("PAGES_AVATARS_URL", host) do
+          expect(subject.send(:host)).to eql(host)
         end
       end
 
       it "builds the URL" do
-        with_env("PAGES_AVATARS_URL", "http://avatars.example.com") do
-          expect(subject.send(:url)).to eql("http://avatars.example.com/hubot?v=3&s=40")
+        with_env("PAGES_AVATARS_URL", host) do
+          expect(subject.send(:url)).to eql(src)
         end
       end
     end
 
     context "without subdomain isolation" do
+      let(:host) { "http://github.example.com/avatars" }
       it "builds the URL" do
-        with_env("PAGES_AVATARS_URL", "http://github.example.com/avatars/") do
-          expected = "http://github.example.com/avatars/hubot?v=3&s=40"
-          expect(subject.send(:url)).to eql(expected)
+        with_env("PAGES_AVATARS_URL", host) do
+          expect(subject.send(:url)).to eql(src)
         end
       end
     end
@@ -77,12 +99,11 @@ describe Jekyll::Avatar do
   end
 
   it "defaults to the default size" do
-    expect(subject.send(:size)).to eql(40)
+    expect(subject.send(:size)).to eql(width)
   end
 
   it "builds the URL" do
-    expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=40"
-    expect(subject.send(:url)).to eql(expected)
+    expect(subject.send(:url)).to eql(src)
   end
 
   it "builds the params" do
@@ -90,11 +111,11 @@ describe Jekyll::Avatar do
     expect(attrs).to eql({
       "data-proofer-ignore" => true,
       :class                => "avatar avatar-small",
-      :alt                  => "hubot",
-      :src                  => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
-      :srcset               => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
-      :width                => 40,
-      :height               => 40,
+      :alt                  => username,
+      :src                  => src,
+      :srcset               => srcset,
+      :width                => width,
+      :height               => height,
     })
   end
 
@@ -109,17 +130,19 @@ describe Jekyll::Avatar do
       expect(subject.send(:path, 2)).to eql("hubot?v=3&s=80")
     end
 
-    it "builds the URL with a scale" do
-      expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=80"
-      expect(subject.send(:url, 2)).to eql(expected)
+    context "when given a scale" do
+      let(:width) { 80 }
+
+      it "builds the URL with a scale" do
+        expect(subject.send(:url, 2)).to eql(src)
+      end
     end
 
     it "builds the srcset" do
-      expected = { 1 => 40, 2 => 80, 3 => 120, 4 => 160 }
-      base = Regexp.escape "https://avatars3.githubusercontent.com/hubot?v=3&"
       srcset = subject.send(:srcset)
-      expected.each do |scale, width|
-        expect(srcset).to match(%r!#{base}s=#{width} #{scale}x!)
+      src_hash.each do |scale, url|
+        regex = Regexp.escape("#{url} #{scale}")
+        expect(srcset).to match(regex)
       end
     end
   end
@@ -133,10 +156,11 @@ describe Jekyll::Avatar do
   end
 
   context "with a size is passed" do
-    let(:args) { "size=45" }
+    let(:width) { 45 }
+    let(:args) { "size=#{width}" }
 
     it "parses the user's requested size" do
-      expect(subject.send(:size)).to eql(45)
+      expect(subject.send(:size)).to eql(width)
     end
   end
 
@@ -151,7 +175,8 @@ describe Jekyll::Avatar do
   end
 
   context "with a size > 48" do
-    let(:args) { "size=80" }
+    let(:width) { 80 }
+    let(:args) { "size=#{width}" }
 
     it "doesn't include the avatar-small class" do
       expect(rendered).to_not match(%r!avatar-small!)
@@ -163,32 +188,32 @@ describe Jekyll::Avatar do
   end
 
   context "when passed the username as a rendered variable" do
-    let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
+    let(:username) { "hubot2" }
+    let(:server_number) { 0 }
+    let(:content) { "{% assign user='#{username}' %}{% avatar {{ user }} %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag "img", :with => {
-        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
-      }
+      expect(output).to have_tag "img", :with => { :src => src }
     end
   end
 
   context "when passed the username as a variable-argument" do
+    let(:username) { "hubot2" }
+    let(:server_number) { 0 }
     let(:content) { "{% assign user='hubot2' %}{% avatar user=user %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag "img", :with => {
-        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
-      }
+      expect(output).to have_tag "img", :with => { :src => src }
     end
   end
 
   context "when passed the username as a sub-variable-argument" do
+    let(:username) { "hubot2" }
+    let(:server_number) { 0 }
     let(:content) { "{% avatar user=page.author %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag "img", :with => {
-        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
-      }
+      expect(output).to have_tag "img", :with => { :src => src }
     end
   end
 
@@ -216,8 +241,8 @@ describe Jekyll::Avatar do
     it "sets the image URL as the data-src" do
       expect(output).to have_tag "img", :with => {
         :src          => "",
-        "data-src"    => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
-        "data-srcset" => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
+        "data-src"    => src,
+        "data-srcset" => srcset,
       }, :without => {
         :srcset => %r!.*!,
       }

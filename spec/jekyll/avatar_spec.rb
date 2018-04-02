@@ -22,16 +22,17 @@ describe Jekyll::Avatar do
   end
 
   it "outputs the HTML" do
-    expected =  '<img class="avatar avatar-small" '.dup
-    expected << 'src="https://avatars3.githubusercontent.com/'
-    expected << 'hubot?v=3&amp;s=40" alt="hubot" srcset="'
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=40 1x, "
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=80 2x, "
-    expected << "https://avatars3.githubusercontent.com/hubot?v=3&amp;s=120 3x, "
-    expected << 'https://avatars3.githubusercontent.com/hubot?v=3&amp;s=160 4x" '
-    expected << 'width="40" height="40" data-proofer-ignore="true" />'
-    expect(rendered)
-    expect(output).to eql("<p>#{expected}</p>\n")
+    expect(output).to have_tag('p') do
+      with_tag 'img', :with => {
+        :alt => "hubot",
+        :class => 'avatar avatar-small',
+        'data-proofer-ignore' => 'true',
+        :height => '40',
+        :src => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40',
+        :srcset => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x',
+        :width => '40'
+      }
+    end
   end
 
   it "parses the username" do
@@ -56,7 +57,7 @@ describe Jekyll::Avatar do
 
       it "builds the URL" do
         with_env("PAGES_AVATARS_URL", "http://avatars.example.com") do
-          expect(subject.send(:url).to_s).to eql("http://avatars.example.com/hubot?v=3&s=40")
+          expect(subject.send(:url)).to eql("http://avatars.example.com/hubot?v=3&s=40")
         end
       end
     end
@@ -65,7 +66,7 @@ describe Jekyll::Avatar do
       it "builds the URL" do
         with_env("PAGES_AVATARS_URL", "http://github.example.com/avatars/") do
           expected = "http://github.example.com/avatars/hubot?v=3&s=40"
-          expect(subject.send(:url).to_s).to eql(expected)
+          expect(subject.send(:url)).to eql(expected)
         end
       end
     end
@@ -81,20 +82,26 @@ describe Jekyll::Avatar do
 
   it "builds the URL" do
     expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=40"
-    expect(subject.send(:url).to_s).to eql(expected)
+    expect(subject.send(:url)).to eql(expected)
   end
 
   it "builds the params" do
     attrs = subject.send(:attributes)
-    expect(attrs[:class]).to eql("avatar avatar-small")
-    expect(attrs[:alt]).to eql("hubot")
-    expect(attrs[:src].to_s).to eql("https://avatars3.githubusercontent.com/hubot?v=3&s=40")
-    expect(attrs[:width]).to eql(40)
-    expect(attrs[:height]).to eql(40)
+    expect(attrs).to eql({
+      "data-proofer-ignore" => true,
+      :class => "avatar avatar-small",
+      :alt => "hubot",
+      :src => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
+      :srcset => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
+      :width => 40,
+      :height => 40
+    })
   end
 
   it "includes data-proofer-ignore" do
-    expect(output).to match(%r!data-proofer-ignore=\"true\"!)
+    expect(output).to have_tag 'img', :with => {
+      'data-proofer-ignore' => 'true'
+    }
   end
 
   context "retina" do
@@ -104,7 +111,7 @@ describe Jekyll::Avatar do
 
     it "builds the URL with a scale" do
       expected = "https://avatars3.githubusercontent.com/hubot?v=3&s=80"
-      expect(subject.send(:url, 2).to_s).to eql(expected)
+      expect(subject.send(:url, 2)).to eql(expected)
     end
 
     it "builds the srcset" do
@@ -159,15 +166,9 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 
@@ -175,15 +176,9 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar user=user %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 
@@ -191,29 +186,27 @@ describe Jekyll::Avatar do
     let(:content) { "{% avatar user=page.author %}" }
 
     it "parses the variable" do
-      expected =  '<img class="avatar avatar-small" '.dup
-      expected << 'src="https://avatars0.githubusercontent.com/'
-      expected << 'hubot2?v=3&amp;s=40" alt="hubot2" srcset="'
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=40 1x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=80 2x, "
-      expected << "https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=120 3x, "
-      expected << 'https://avatars0.githubusercontent.com/hubot2?v=3&amp;s=160 4x" '
-      expected << 'width="40" height="40" data-proofer-ignore="true" />'
-      expect(output).to eql("<p>#{expected}</p>\n")
+      expect(output).to have_tag 'img', :with => {
+        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      }
     end
   end
 
   context "loops" do
     let(:content) do
-      content =  '{% assign users = "a|b" | split:"|" %}'.dup
-      content << "{% for user in users %}"
-      content << "  {% avatar user=user %}"
-      content << "{% endfor %}"
-      content
+      content = <<-LIQUID
+{% assign users = "a|b" | split:"|" %}
+{% for user in users %}
+  {% avatar user=user %}
+{% endfor %}
+      LIQUID
     end
 
     it "renders each avatar" do
-      expect(output).to match('alt="b"')
+      expect(output).to have_tag('p') do
+        with_tag 'img', :with => { :alt => 'a' }
+        with_tag 'img', :with => { :alt => 'b' }
+      end
     end
   end
 end

@@ -4,9 +4,14 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
 require "jekyll"
 require "jekyll-avatar"
+require "rspec-html-matchers"
 
 TEST_DIR = File.dirname(__FILE__)
 TMP_DIR  = File.expand_path("../tmp", TEST_DIR)
+
+RSpec.configure do |config|
+  config.include RSpecHtmlMatchers
+end
 
 def doc_with_content(_content, opts = {})
   my_site = site(opts)

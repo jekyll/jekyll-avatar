@@ -22,15 +22,15 @@ describe Jekyll::Avatar do
   end
 
   it "outputs the HTML" do
-    expect(output).to have_tag('p') do
-      with_tag 'img', :with => {
-        :alt => "hubot",
-        :class => 'avatar avatar-small',
-        'data-proofer-ignore' => 'true',
-        :height => '40',
-        :src => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40',
-        :srcset => 'https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x',
-        :width => '40'
+    expect(output).to have_tag("p") do
+      with_tag "img", :with => {
+        :alt                  => "hubot",
+        :class                => "avatar avatar-small",
+        "data-proofer-ignore" => "true",
+        :height               => "40",
+        :src                  => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
+        :srcset               => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
+        :width                => "40",
       }
     end
   end
@@ -89,18 +89,18 @@ describe Jekyll::Avatar do
     attrs = subject.send(:attributes)
     expect(attrs).to eql({
       "data-proofer-ignore" => true,
-      :class => "avatar avatar-small",
-      :alt => "hubot",
-      :src => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
-      :srcset => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
-      :width => 40,
-      :height => 40
+      :class                => "avatar avatar-small",
+      :alt                  => "hubot",
+      :src                  => "https://avatars3.githubusercontent.com/hubot?v=3&s=40",
+      :srcset               => "https://avatars3.githubusercontent.com/hubot?v=3&s=40 1x, https://avatars3.githubusercontent.com/hubot?v=3&s=80 2x, https://avatars3.githubusercontent.com/hubot?v=3&s=120 3x, https://avatars3.githubusercontent.com/hubot?v=3&s=160 4x",
+      :width                => 40,
+      :height               => 40,
     })
   end
 
   it "includes data-proofer-ignore" do
-    expect(output).to have_tag 'img', :with => {
-      'data-proofer-ignore' => 'true'
+    expect(output).to have_tag "img", :with => {
+      "data-proofer-ignore" => "true",
     }
   end
 
@@ -166,8 +166,8 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar {{ user }} %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag 'img', :with => {
-        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      expect(output).to have_tag "img", :with => {
+        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
       }
     end
   end
@@ -176,8 +176,8 @@ describe Jekyll::Avatar do
     let(:content) { "{% assign user='hubot2' %}{% avatar user=user %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag 'img', :with => {
-        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      expect(output).to have_tag "img", :with => {
+        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
       }
     end
   end
@@ -186,15 +186,15 @@ describe Jekyll::Avatar do
     let(:content) { "{% avatar user=page.author %}" }
 
     it "parses the variable" do
-      expect(output).to have_tag 'img', :with => {
-        :src => 'https://avatars0.githubusercontent.com/hubot2?v=3&s=40'
+      expect(output).to have_tag "img", :with => {
+        :src => "https://avatars0.githubusercontent.com/hubot2?v=3&s=40",
       }
     end
   end
 
   context "loops" do
     let(:content) do
-      content = <<-LIQUID
+      <<-LIQUID
 {% assign users = "a|b" | split:"|" %}
 {% for user in users %}
   {% avatar user=user %}
@@ -203,9 +203,9 @@ describe Jekyll::Avatar do
     end
 
     it "renders each avatar" do
-      expect(output).to have_tag('p') do
-        with_tag 'img', :with => { :alt => 'a' }
-        with_tag 'img', :with => { :alt => 'b' }
+      expect(output).to have_tag("p") do
+        with_tag "img", :with => { :alt => "a" }
+        with_tag "img", :with => { :alt => "b" }
       end
     end
   end

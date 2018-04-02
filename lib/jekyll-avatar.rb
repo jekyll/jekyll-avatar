@@ -34,9 +34,9 @@ module Jekyll
       }
 
       if lazy_load?
-        result[:src] = ''
-        result['data-src'] = url
-        result['data-srcset'] = srcset
+        result[:src] = ""
+        result["data-src"] = url
+        result["data-srcset"] = srcset
       else
         result[:src] = url
         result[:srcset] = srcset
@@ -46,7 +46,7 @@ module Jekyll
     end
 
     def lazy_load?
-      @text.include?('lazy=true')
+      @text.include?("lazy=true")
     end
 
     def username

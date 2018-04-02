@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 lib = File.expand_path("../lib", __FILE__)
@@ -25,5 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "rubocop"
+  # need to match Jekyll, since the config is inherited
+  # https://github.com/jekyll/jekyll/blob/e0f500118219b0e819520bd7bd1aeb4695e31cba/Gemfile#L34
+  spec.add_development_dependency "rubocop", "~> 0.51.0"
 end

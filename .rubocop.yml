@@ -1,7 +1,7 @@
 inherit_gem:
   jekyll: .rubocop.yml
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Metrics/LineLength:

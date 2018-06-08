@@ -17,9 +17,10 @@ gem 'jekyll-avatar'
 And add the following to your site's `_config.yml` file:
 
 ```yaml
-gems:
+plugins:
   - jekyll-avatar
 ```
+Note: If you are using a Jekyll version less than 3.5.0, use the `gems` key instead of `plugins`.
 
 ## Usage
 

@@ -30,7 +30,7 @@ module Jekyll
         :alt                  => username,
         :width                => size,
         :height               => size,
-        "data-proofer-ignore" => true,
+        "data-proofer-ignore" => true
       }
 
       if lazy_load?

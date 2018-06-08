@@ -51,7 +51,7 @@ describe Jekyll::Avatar do
         :height               => height,
         :src                  => src,
         :srcset               => srcset,
-        :width                => width,
+        :width                => width
       }
     end
   end
@@ -115,13 +115,13 @@ describe Jekyll::Avatar do
       :src                  => src,
       :srcset               => srcset,
       :width                => width,
-      :height               => height,
+      :height               => height
     })
   end
 
   it "includes data-proofer-ignore" do
     expect(output).to have_tag "img", :with => {
-      "data-proofer-ignore" => "true",
+      "data-proofer-ignore" => "true"
     }
   end
 
@@ -242,9 +242,9 @@ describe Jekyll::Avatar do
       expect(output).to have_tag "img", :with => {
         :src          => "",
         "data-src"    => src,
-        "data-srcset" => srcset,
+        "data-srcset" => srcset
       }, :without => {
-        :srcset => %r!.*!,
+        :srcset => %r!.*!
       }
     end
   end

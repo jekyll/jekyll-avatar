@@ -1,7 +1,10 @@
-inherit_gem:
-  jekyll: .rubocop.yml
+inherit_from: .rubocop_todo.yml
 
-Style/FileName:
+require: rubocop-jekyll
+inherit_gem:
+  rubocop-jekyll: .rubocop.yml
+
+Naming/FileName:
   Enabled: false
 
 Metrics/LineLength:

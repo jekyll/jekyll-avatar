@@ -2,5 +2,6 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in jekyll-avatar.gemspec
 gemspec
+
+gem "jekyll", ENV["JEKYLL_VERSION"] if ENV["JEKYLL_VERSION"]

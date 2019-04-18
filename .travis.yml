@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.5
+  - 2.4
 cache: bundler
 script: script/cibuild
 env:

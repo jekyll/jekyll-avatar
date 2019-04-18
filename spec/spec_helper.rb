@@ -17,7 +17,7 @@ def doc_with_content(_content, opts = {})
   my_site = site(opts)
   options = { :site => my_site, :collection => collection(my_site) }
   doc = Jekyll::Document.new(source_dir("_test/doc.md"), options)
-  doc.merge_data!("author" => "hubot2")
+  doc.merge_data!({ "author" => "hubot2" })
   doc
 end
 

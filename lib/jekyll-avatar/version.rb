@@ -3,6 +3,6 @@
 module Liquid; class Tag; end; end
 module Jekyll
   class Avatar < Liquid::Tag
-    VERSION = "0.6.0".freeze
+    VERSION = "0.6.0"
   end
 end

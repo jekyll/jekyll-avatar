@@ -108,7 +108,7 @@ describe Jekyll::Avatar do
 
   it "builds the params" do
     attrs = subject.send(:attributes)
-    expect(attrs).to eql({
+    expect(attrs).to eql(
       "data-proofer-ignore" => true,
       :class                => "avatar avatar-small",
       :alt                  => username,
@@ -116,7 +116,7 @@ describe Jekyll::Avatar do
       :srcset               => srcset,
       :width                => width,
       :height               => height
-    })
+    )
   end
 
   it "includes data-proofer-ignore" do
@@ -219,11 +219,11 @@ describe Jekyll::Avatar do
 
   context "loops" do
     let(:content) do
-      <<-LIQUID
-{% assign users = "a|b" | split:"|" %}
-{% for user in users %}
-  {% avatar user=user %}
-{% endfor %}
+      <<~LIQUID
+        {% assign users = "a|b" | split:"|" %}
+        {% for user in users %}
+          {% avatar user=user %}
+        {% endfor %}
       LIQUID
     end
 

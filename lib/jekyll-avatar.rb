@@ -72,10 +72,10 @@ module Jekyll
     end
 
     def host
-      if ENV["PAGES_AVATARS_URL"].to_s.empty?
-        "https://avatars#{server_number}.githubusercontent.com"
-      else
+      if ENV["PAGES_AVATARS_URL"].is_a?(String) && !ENV["PAGES_AVATARS_URL"].empty?
         ENV["PAGES_AVATARS_URL"]
+      else
+        "https://avatars#{server_number}.githubusercontent.com"
       end
     end
 

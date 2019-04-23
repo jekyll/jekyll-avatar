@@ -79,8 +79,13 @@ module Jekyll
       end
     end
 
+    def parsed_host
+      @parsed_host ||= {}
+      @parsed_host[host] ||= Addressable::URI.parse(host)
+    end
+
     def url(scale = 1)
-      uri = Addressable::URI.parse host
+      uri = parsed_host
       uri.path << "/" unless uri.path.end_with?("/")
       uri = uri.join path(scale)
       uri.to_s

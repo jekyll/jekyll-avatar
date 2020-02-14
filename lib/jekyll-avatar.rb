@@ -54,8 +54,12 @@ module Jekyll
       matches = @text.match(%r!\buser=([\w\.]+)\b!)
       if matches
         lookup_variable(@context, matches[1])
+      elsif @text.include?(" ")
+        result = @text.split(" ")[0]
+        result.sub!("@", "")
+        result
       else
-        @text.split(" ").first.sub("@", "")
+        @text
       end
     end
 

@@ -13,11 +13,12 @@ module Jekyll
     def initialize(_tag_name, text, _tokens)
       super
       @text = text
+      @markup = Liquid::Template.parse(text)
     end
 
     def render(context)
       @context = context
-      @text    = Liquid::Template.parse(@text).render(@context)
+      @text    = @markup.render(@context)
       attrs    = attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")
       "<img #{attrs} />"
     end

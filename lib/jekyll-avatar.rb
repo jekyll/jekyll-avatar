@@ -26,20 +26,20 @@ module Jekyll
 
     def attributes
       result = {
-        :class                => classes,
-        :alt                  => username,
-        :width                => size,
-        :height               => size,
+        "class"               => classes,
+        "alt"                 => username,
+        "width"               => size,
+        "height"              => size,
         "data-proofer-ignore" => true
       }
 
       if lazy_load?
-        result[:src] = ""
+        result["src"] = ""
         result["data-src"] = url
         result["data-srcset"] = srcset
       else
-        result[:src] = url
-        result[:srcset] = srcset
+        result["src"] = url
+        result["srcset"] = srcset
       end
 
       result
@@ -53,8 +53,12 @@ module Jekyll
       matches = @text.match(%r!\buser=([\w\.]+)\b!)
       if matches
         lookup_variable(@context, matches[1])
+      elsif @text.include?(" ")
+        result = @text.split(" ")[0]
+        result.sub!("@", "")
+        result
       else
-        @text.split(" ").first.sub("@", "")
+        @text
       end
     end
 

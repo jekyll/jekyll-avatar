@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "jekyll"
+require "jekyll-avatar"
+require "memory_profiler"
+
+# An array of 100 strings
+AUTHORS = ("a".."j").to_a.each_with_object([]) do |str, res|
+  count = 10
+  until count.zero?
+    res << (str * count)
+    count -= 1
+  end
+end
+
+CONSTRUCTS = [
+  "{% avatar benbalter %}",
+  "{% avatar octocat size=24 %}",
+  "{% avatar jekyllbot size=96 %}",
+  "{% avatar hubot lazy=true %}",
+]
+
+TEMPLATE_1 = Liquid::Template.parse(<<~TEXT)
+  {% for author in authors %}
+    {% avatar user=author %}
+  {% endfor %}
+TEXT
+
+TEMPLATE_2 = Liquid::Template.parse(CONSTRUCTS.join("\n"))
+
+# ---
+
+report = MemoryProfiler.report do
+  Jekyll.logger.info "Profiling:", "100 #{'different avatars'.cyan} via Liquid loop.."
+  TEMPLATE_1.render("authors" => AUTHORS)
+
+  CONSTRUCTS.each do |entry|
+    Jekyll.logger.info "Profiling:", "100 renders of #{entry.cyan}.."
+  end
+  100.times { TEMPLATE_2.render }
+  Jekyll.logger.info "", "done. Generating results.."
+  Jekyll.logger.info ""
+end
+
+if ENV["CI"]
+  report.pretty_print(scale_bytes: true, color_output: false, normalize_paths: true)
+else
+  FileUtils.mkdir_p("tmp")
+
+  total_allocated_output = report.scale_bytes(report.total_allocated_memsize)
+  total_retained_output  = report.scale_bytes(report.total_retained_memsize)
+
+  Jekyll.logger.info "Total allocated:", "#{total_allocated_output} (#{report.total_allocated} objects)".cyan
+  Jekyll.logger.info "Total retained:", "#{total_retained_output} (#{report.total_retained} objects)".cyan
+
+  report.pretty_print(to_file: "tmp/memprof.txt", normalize_paths: true, scale_bytes: true)
+  Jekyll.logger.info "\nDetailed Report saved into:", "tmp/memprof.txt".cyan
+end

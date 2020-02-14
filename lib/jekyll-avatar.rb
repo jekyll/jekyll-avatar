@@ -96,8 +96,11 @@ module Jekyll
       uri.to_s
     end
 
+    SCALES = %w(1 2 3 4).freeze
+    private_constant :SCALES
+
     def srcset
-      (1..4).map { |scale| "#{url(scale)} #{scale}x" }.join(", ")
+      SCALES.map { |scale| "#{url(scale.to_i)} #{scale}x" }.join(", ")
     end
 
     # See http://primercss.io/avatars/#small-avatars

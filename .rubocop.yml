@@ -16,4 +16,5 @@ Metrics/BlockLength:
 
 AllCops:
   Exclude:
+    - script/**/*
     - vendor/**/*

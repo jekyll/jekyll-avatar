@@ -14,6 +14,9 @@ module Jekyll
       super
       @text = text
       @markup = Liquid::Template.parse(text)
+
+      @custom_host = ENV["PAGES_AVATARS_URL"]
+      @custom_host = "" unless @custom_host.is_a?(String)
     end
 
     def render(context)
@@ -77,10 +80,10 @@ module Jekyll
     end
 
     def host
-      if ENV["PAGES_AVATARS_URL"].is_a?(String) && !ENV["PAGES_AVATARS_URL"].empty?
-        ENV["PAGES_AVATARS_URL"]
-      else
+      if @custom_host.empty?
         "https://avatars#{server_number}.githubusercontent.com"
+      else
+        @custom_host
       end
     end
 
@@ -89,11 +92,17 @@ module Jekyll
       @parsed_host[host] ||= Addressable::URI.parse(host)
     end
 
-    def url(scale = 1)
+    def url_with_custom_host(scale = 1)
       uri = parsed_host
       uri.path << "/" unless uri.path.end_with?("/")
       uri = uri.join path(scale)
       uri.to_s
+    end
+
+    def url(scale = 1)
+      return url_with_custom_host(scale) unless @custom_host.empty?
+
+      "#{host}/#{path(scale)}"
     end
 
     SCALES = %w(1 2 3 4).freeze

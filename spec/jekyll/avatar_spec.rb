@@ -109,13 +109,13 @@ describe Jekyll::Avatar do
   it "builds the params" do
     attrs = subject.send(:attributes)
     expect(attrs).to eql({
-      "data-proofer-ignore" => true,
-      "class"               => "avatar avatar-small",
-      "alt"                 => username,
-      "src"                 => src,
-      "srcset"              => srcset,
-      "width"               => width,
-      "height"              => height
+      :"data-proofer-ignore" => true,
+      :class                 => "avatar avatar-small",
+      :alt                   => username,
+      :src                   => src,
+      :srcset                => srcset,
+      :width                 => width,
+      :height                => height
     })
   end
 

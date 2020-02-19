@@ -6,9 +6,26 @@ module Jekyll
   class Avatar < Liquid::Tag
     include Jekyll::LiquidExtensions
 
+    def self.generate_template_with(keys)
+      attrs = (BASE_ATTRIBUTES + keys).map! { |key| %(#{key}="%<#{key}>s") }.join(" ")
+      "<img #{attrs} />"
+    end
+    private_class_method :generate_template_with
+
+    #
+
     SERVERS      = 4
     DEFAULT_SIZE = 40
     API_VERSION  = 3
+
+    BASE_ATTRIBUTES = %w(
+      class alt width height data-proofer-ignore src
+    ).freeze
+
+    BASE_TEMPLATE = generate_template_with %w(srcset)
+    LAZY_TEMPLATE = generate_template_with %w(data-src data-srcset)
+
+    private_constant :BASE_ATTRIBUTES, :BASE_TEMPLATE, :LAZY_TEMPLATE
 
     def initialize(_tag_name, text, _tokens)
       super
@@ -19,28 +36,28 @@ module Jekyll
     def render(context)
       @context = context
       @text    = @markup.render(@context)
-      attrs    = attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")
-      "<img #{attrs} />"
+      template = lazy_load? ? LAZY_TEMPLATE : BASE_TEMPLATE
+      format(template, attributes)
     end
 
     private
 
     def attributes
       result = {
-        "class"               => classes,
-        "alt"                 => username,
-        "width"               => size,
-        "height"              => size,
-        "data-proofer-ignore" => true
+        :class                 => classes,
+        :alt                   => username,
+        :width                 => size,
+        :height                => size,
+        :"data-proofer-ignore" => true
       }
 
       if lazy_load?
-        result["src"] = ""
-        result["data-src"] = url
-        result["data-srcset"] = srcset
+        result[:src] = ""
+        result[:"data-src"] = url
+        result[:"data-srcset"] = srcset
       else
-        result["src"] = url
-        result["srcset"] = srcset
+        result[:src] = url
+        result[:srcset] = srcset
       end
 
       result

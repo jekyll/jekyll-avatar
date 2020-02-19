@@ -27,8 +27,6 @@ module Jekyll
 
     private_constant :BASE_ATTRIBUTES, :BASE_TEMPLATE, :LAZY_TEMPLATE
 
-    #
-
     def initialize(_tag_name, text, _tokens)
       super
       @text = text

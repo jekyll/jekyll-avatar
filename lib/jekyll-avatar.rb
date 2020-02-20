@@ -15,8 +15,8 @@ module Jekyll
     #
 
     SERVERS      = 4
-    DEFAULT_SIZE = 40
-    API_VERSION  = 3
+    DEFAULT_SIZE = "40"
+    API_VERSION  = "3"
 
     BASE_ATTRIBUTES = %w(
       class alt width height data-proofer-ignore src
@@ -48,7 +48,7 @@ module Jekyll
         :alt                   => username,
         :width                 => size,
         :height                => size,
-        :"data-proofer-ignore" => true
+        :"data-proofer-ignore" => "true"
       }
 
       if lazy_load?
@@ -80,13 +80,14 @@ module Jekyll
       end
     end
 
+    # Returns a string value
     def size
       matches = @text.match(%r!\bsize=(\d+)\b!i)
-      matches ? matches[1].to_i : DEFAULT_SIZE
+      matches ? matches[1] : DEFAULT_SIZE
     end
 
     def path(scale = 1)
-      "#{username}?v=#{API_VERSION}&s=#{size * scale}"
+      "#{username}?v=#{API_VERSION}&s=#{scale == 1 ? size : (size.to_i * scale)}"
     end
 
     def server_number
@@ -122,7 +123,7 @@ module Jekyll
 
     # See http://primercss.io/avatars/#small-avatars
     def classes
-      size < 48 ? "avatar avatar-small" : "avatar"
+      size.to_i < 48 ? "avatar avatar-small" : "avatar"
     end
   end
 end

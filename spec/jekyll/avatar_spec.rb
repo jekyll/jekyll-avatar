@@ -24,13 +24,13 @@ describe Jekyll::Avatar do
     uri.query_values = { :v => 3, :s => width }.to_a
     uri
   end
-  let(:height) { 40 }
-  let(:width) { 40 }
+  let(:height) { "40" }
+  let(:width) { "40" }
   let(:scales) { (1..4) }
   let(:src) { src_hash["1x"] }
   let(:src_hash) do
     scales.map do |scale|
-      uri.query_values = { "v" => 3, "s" => width * scale }.to_a
+      uri.query_values = { "v" => 3, "s" => width.to_i * scale }.to_a
       ["#{scale}x", uri.to_s]
     end.to_h
   end
@@ -109,7 +109,7 @@ describe Jekyll::Avatar do
   it "builds the params" do
     attrs = subject.send(:attributes)
     expect(attrs).to eql({
-      :"data-proofer-ignore" => true,
+      :"data-proofer-ignore" => "true",
       :class                 => "avatar avatar-small",
       :alt                   => username,
       :src                   => src,
@@ -131,7 +131,7 @@ describe Jekyll::Avatar do
     end
 
     context "when given a scale" do
-      let(:width) { 80 }
+      let(:width) { "80" }
 
       it "builds the URL with a scale" do
         expect(subject.send(:url, 2)).to eql(src)
@@ -156,7 +156,7 @@ describe Jekyll::Avatar do
   end
 
   context "with a size is passed" do
-    let(:width) { 45 }
+    let(:width) { "45" }
     let(:args) { "size=#{width}" }
 
     it "parses the user's requested size" do
@@ -175,7 +175,7 @@ describe Jekyll::Avatar do
   end
 
   context "with a size > 48" do
-    let(:width) { 80 }
+    let(:width) { "80" }
     let(:args) { "size=#{width}" }
 
     it "doesn't include the avatar-small class" do

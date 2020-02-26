@@ -4,8 +4,6 @@ require "zlib"
 
 module Jekyll
   class Avatar < Liquid::Tag
-    include Jekyll::LiquidExtensions
-
     def self.generate_template_with(keys)
       attrs = (BASE_ATTRIBUTES + keys).map! { |key| %(#{key}="%<#{key}>s") }.join(" ")
       "<img #{attrs} />"
@@ -29,8 +27,11 @@ module Jekyll
 
     def initialize(_tag_name, text, _tokens)
       super
-      @text = text
-      @markup = Liquid::Template.parse(text)
+      @text = text.strip
+      @markup = Liquid::Template.parse(@text)
+
+      @size = compute_size
+      @user_variable = extract_user_variable
 
       @custom_host = ENV["PAGES_AVATARS_URL"]
       @custom_host = "" unless @custom_host.is_a?(String)
@@ -70,24 +71,42 @@ module Jekyll
       @text.include?("lazy=true")
     end
 
-    def username
+    def extract_user_variable
       matches = @text.match(%r!\buser=([\w\.]+)\b!)
-      if matches
-        lookup_variable(@context, matches[1])
-      elsif @text.include?(" ")
-        result = @text.split(" ")[0]
-        result.sub!("@", "")
-        result
+      matches[1] if matches
+    end
+
+    def username
+      return lookup_variable(@user_variable) if @user_variable
+
+      result = @text.include?(" ") ? @text.split(" ")[0] : @text
+      result.start_with?("@") ? result.sub("@", "") : result
+    end
+
+    # Lookup a Liquid variable in the current context.
+    #
+    # variable - the variable name, as a string.
+    #
+    # Returns the value of the variable in the context or the variable name if not found.
+    def lookup_variable(variable)
+      lookup = @context
+      if variable.include?(".")
+        variable.split(".").each do |value|
+          lookup = lookup[value]
+        end
       else
-        @text
+        lookup = lookup[variable]
       end
+
+      lookup || variable
     end
 
     # Returns a string value
-    def size
+    def compute_size
       matches = @text.match(%r!\bsize=(\d+)\b!i)
       matches ? matches[1] : DEFAULT_SIZE
     end
+    attr_reader :size
 
     def path(scale = 1)
       "#{username}?v=#{API_VERSION}&s=#{scale == 1 ? size : (size.to_i * scale)}"

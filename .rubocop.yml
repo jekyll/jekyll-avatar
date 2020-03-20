@@ -7,7 +7,7 @@ inherit_gem:
 Naming/FileName:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - spec/*/**
 

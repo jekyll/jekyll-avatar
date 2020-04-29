@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("../lib", __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "jekyll-avatar/version"
+require_relative "lib/jekyll-avatar/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-avatar"
@@ -14,9 +12,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/benbalter/jekyll-avatar"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |file|
-    file.match(%r!^(test|spec|features)/!)
-  end
+  spec.files         = `git ls-files lib`.split("\n").concat(%w(LICENSE.txt README.md))
 
   spec.require_paths = ["lib"]
 

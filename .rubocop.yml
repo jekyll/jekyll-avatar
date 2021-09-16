@@ -1,6 +1,10 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-jekyll
+require: 
+  - rubocop-jekyll
+  - rubocop-performance
+  - rubocop-rspec
+  
 inherit_gem:
   rubocop-jekyll: .rubocop.yml
 
@@ -18,3 +22,4 @@ AllCops:
   Exclude:
     - script/**/*
     - vendor/**/*
+  NewCops: enable

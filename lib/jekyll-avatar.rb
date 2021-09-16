@@ -52,7 +52,7 @@ module Jekyll
         :alt                   => username,
         :width                 => size,
         :height                => size,
-        :"data-proofer-ignore" => "true"
+        :"data-proofer-ignore" => "true",
       }
 
       if lazy_load?
@@ -72,7 +72,7 @@ module Jekyll
     end
 
     def extract_user_variable
-      matches = @text.match(%r!\buser=([\w\.]+)\b!)
+      matches = @text.match(%r!\buser=([\w.]+)\b!)
       matches[1] if matches
     end
 

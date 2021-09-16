@@ -2,5 +2,6 @@
 
 set -ex
 
-bundle exec rake spec
-bundle exec rubocop
+bundle exec rspec
+bundle exec rubocop -S -D
+gem build jekyll-avatar.gemspec

@@ -3,6 +3,8 @@
 require "spec_helper"
 
 describe Jekyll::Avatar do
+  subject { described_class.parse "avatar", text, tokenizer, parse_context }
+
   let(:doc) { doc_with_content(content) }
   let(:username) { "hubot" }
   let(:args) { "" }
@@ -36,8 +38,6 @@ describe Jekyll::Avatar do
   end
   let(:srcset) { src_hash.map { |scale, src| "#{src} #{scale}" }.join(", ") }
 
-  subject { described_class.parse "avatar", text, tokenizer, parse_context }
-
   it "has a version number" do
     expect(Jekyll::Avatar::VERSION).not_to be nil
   end
@@ -51,7 +51,7 @@ describe Jekyll::Avatar do
         "height"              => height,
         "src"                 => src,
         "srcset"              => srcset,
-        "width"               => width
+        "width"               => width,
       }
     end
   end
@@ -70,6 +70,7 @@ describe Jekyll::Avatar do
 
   context "with a custom host" do
     let(:host) { "http://avatars.example.com" }
+
     context "with subdomain isolation" do
       it "builds the host" do
         with_env("PAGES_AVATARS_URL", host) do
@@ -86,6 +87,7 @@ describe Jekyll::Avatar do
 
     context "without subdomain isolation" do
       let(:host) { "http://github.example.com/avatars" }
+
       it "builds the URL" do
         with_env("PAGES_AVATARS_URL", host) do
           expect(subject.send(:url)).to eql(src)
@@ -115,13 +117,13 @@ describe Jekyll::Avatar do
       :src                   => src,
       :srcset                => srcset,
       :width                 => width,
-      :height                => height
+      :height                => height,
     })
   end
 
   it "includes data-proofer-ignore" do
     expect(output).to have_tag "img", :with => {
-      "data-proofer-ignore" => "true"
+      "data-proofer-ignore" => "true",
     }
   end
 
@@ -179,7 +181,7 @@ describe Jekyll::Avatar do
     let(:args) { "size=#{width}" }
 
     it "doesn't include the avatar-small class" do
-      expect(rendered).to_not match(%r!avatar-small!)
+      expect(rendered).not_to match(%r!avatar-small!)
     end
 
     it "calculates the classes" do
@@ -219,11 +221,11 @@ describe Jekyll::Avatar do
 
   context "loops" do
     let(:content) do
-      <<-LIQUID
-{% assign users = "a|b" | split:"|" %}
-{% for user in users %}
-  {% avatar user=user %}
-{% endfor %}
+      <<~LIQUID
+        {% assign users = "a|b" | split:"|" %}
+        {% for user in users %}
+          {% avatar user=user %}
+        {% endfor %}
       LIQUID
     end
 
@@ -242,9 +244,9 @@ describe Jekyll::Avatar do
       expect(output).to have_tag "img", :with => {
         "src"         => "",
         "data-src"    => src,
-        "data-srcset" => srcset
+        "data-srcset" => srcset,
       }, :without => {
-        "srcset" => %r!.*!
+        "srcset" => %r!.*!,
       }
     end
   end

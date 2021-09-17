@@ -9,6 +9,7 @@ on:
 jobs:
   test:
 
+    name: "Test Jekyll ${{ matrix.jekyll-version }} (Ruby ${{ matrix.ruby-version }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:

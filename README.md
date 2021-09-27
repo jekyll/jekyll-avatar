@@ -2,7 +2,7 @@
 
 *A Jekyll plugin for rendering GitHub avatars*
 
-[![Build Status](https://travis-ci.org/benbalter/jekyll-avatar.svg)](https://travis-ci.org/benbalter/jekyll-avatar)
+[![CI](https://github.com/benbalter/jekyll-avatar/actions/workflows/ci.yml/badge.svg)](https://github.com/benbalter/jekyll-avatar/actions/workflows/ci.yml)
 
 Jekyll Avatar makes it easy to add GitHub avatars to your Jekyll site by specifying a username. If performance is a concern, Jekyll Avatar is deeply integrated with the GitHub avatar API, ensuring avatars are cached and load in parallel. It even automatically upgrades users to Retina images, when supported.
 

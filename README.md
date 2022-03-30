@@ -62,7 +62,7 @@ You can also pass the username as a variable, like this:
 
 ```
 {% assign user="hubot" %}
-{% avatar {{ username }} %}
+{% avatar {{ user }} %}
 ```
 
 Or, if the variable is someplace a bit more complex, like a loop:
